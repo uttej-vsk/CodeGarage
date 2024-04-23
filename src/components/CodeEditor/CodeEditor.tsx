@@ -1,33 +1,30 @@
+import React from 'react';
 import { Editor } from '@monaco-editor/react';
-import { VITE_REACT_TEMPLATE } from '../../templates/react-vite';
-import { useState } from 'react';
 import FileTabs from './FileTabs';
 import { getLanguageFromFileName } from './getLanguageFromFileName';
+import { FileNode } from '@webcontainer/api';
+import { useWebContainer } from '../../providers/WebContainerProvider/useWebContainer';
 
-function CodeEditor() {
-  const [activeFile, setActiveFile] = useState(() => VITE_REACT_TEMPLATE.entry);
+export default function CodeEditor() {
+  const { template } = useWebContainer();
+  const [activeFile, setActiveFile] = React.useState(() => template.entry);
 
-  console.log(activeFile);
-
-  const currentFile = VITE_REACT_TEMPLATE.files[activeFile];
+  const currentFile = template.files[activeFile] as FileNode;
   const language = getLanguageFromFileName(activeFile);
-  console.log(currentFile);
 
   return (
     <div className="h-full">
       <FileTabs
-        files={VITE_REACT_TEMPLATE.visibleFiles}
+        files={template.visibleFiles}
         activeFile={activeFile}
         onFileChange={setActiveFile}
       />
       <Editor
         theme="vs-dark"
         path={activeFile}
-        defaultValue={currentFile.contents}
+        defaultValue={currentFile.file.contents as string} // Ideally, worry about the encoding in production, for our example, this is fine.
         defaultLanguage={language}
       />
     </div>
   );
 }
-
-export default CodeEditor;
