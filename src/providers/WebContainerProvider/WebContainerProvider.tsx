@@ -1,6 +1,7 @@
 import { WebContainer } from '@webcontainer/api';
 import { Template } from '../../templates/react-vite';
 import { createContext, useEffect, useState } from 'react';
+import { PropsWithChildren } from 'react';
 
 export const WebContainerContext = createContext<{
   webContainer: WebContainer | null;
@@ -17,7 +18,7 @@ type WebContainerProviderProps = {
 export default function WebContainerProvider({
   template,
   children,
-}: React.PropsWithChildren<WebContainerProviderProps>) {
+}: PropsWithChildren<WebContainerProviderProps>) {
   const [webContainer, setWebContainer] = useState<WebContainer | null>(null);
 
   useEffect(() => {

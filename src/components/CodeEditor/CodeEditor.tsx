@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { Editor } from '@monaco-editor/react';
 import FileTabs from './FileTabs';
 import { getLanguageFromFileName } from './getLanguageFromFileName';
@@ -7,9 +7,11 @@ import { useWebContainer } from '../../providers/WebContainerProvider/useWebCont
 
 export default function CodeEditor() {
   const { template } = useWebContainer();
-  const [activeFile, setActiveFile] = React.useState(() => template.entry);
+
+  const [activeFile, setActiveFile] = useState(template.entry);
 
   const currentFile = template.files[activeFile] as FileNode;
+
   const language = getLanguageFromFileName(activeFile);
 
   return (
@@ -22,7 +24,7 @@ export default function CodeEditor() {
       <Editor
         theme="vs-dark"
         path={activeFile}
-        defaultValue={currentFile.file.contents as string} // Ideally, worry about the encoding in production, for our example, this is fine.
+        defaultValue={currentFile.file.contents as string}
         defaultLanguage={language}
       />
     </div>
