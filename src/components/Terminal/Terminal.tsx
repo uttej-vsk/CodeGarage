@@ -27,6 +27,7 @@ export default function Terminal() {
     terminal.loadAddon(fitAddon);
 
     terminal.open(terminalRef.current!);
+
     fitAddon.fit();
     setTerminal(terminal);
 
@@ -46,8 +47,6 @@ export default function Terminal() {
           rows: terminal.rows,
         },
       });
-
-      console.log(shellProcess);
 
       shellProcess.output.pipeTo(
         new WritableStream({

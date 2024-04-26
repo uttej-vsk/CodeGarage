@@ -6,13 +6,19 @@ import { FileNode } from '@webcontainer/api';
 import { useWebContainer } from '../../providers/WebContainerProvider/useWebContainer';
 
 export default function CodeEditor() {
-  const { template } = useWebContainer();
+  const { template, webContainer } = useWebContainer();
 
   const [activeFile, setActiveFile] = useState(template.entry);
 
   const currentFile = template.files[activeFile] as FileNode;
 
   const language = getLanguageFromFileName(activeFile);
+
+  async function handleCodeChange(content: string) {
+    if (!webContainer) return;
+
+    await webContainer.fs.writeFile(activeFile, content);
+  }
 
   return (
     <div className="h-full">
@@ -26,6 +32,7 @@ export default function CodeEditor() {
         path={activeFile}
         defaultValue={currentFile.file.contents as string}
         defaultLanguage={language}
+        onChange={(value) => handleCodeChange(value ?? '')}
       />
     </div>
   );
